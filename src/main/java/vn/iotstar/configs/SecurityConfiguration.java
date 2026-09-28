@@ -37,10 +37,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/login**").permitAll()
-                        .requestMatchers("/user/**").permitAll()      // trang profile (HTML)
+                        .requestMatchers("/user/**").permitAll()      
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
-                        .anyRequest().authenticated())                // /users/** cần JWT
+                        .anyRequest().authenticated())                
                 .sessionManagement(m -> m.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

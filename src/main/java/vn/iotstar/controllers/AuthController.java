@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/** Controller trả về view Thymeleaf (login.html, profile.html) cho phần Ajax. */
 @Controller
 @RequestMapping("/")
 public class AuthController {

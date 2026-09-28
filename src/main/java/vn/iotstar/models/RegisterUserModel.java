@@ -11,5 +11,5 @@ public class RegisterUserModel {
     private String email;
     private String password;
     private String fullName;
-    private String images; // tuỳ chọn, mặc định /images/u1.jpg
+    private String images; 
 }

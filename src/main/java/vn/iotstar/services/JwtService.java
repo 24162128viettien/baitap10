@@ -33,7 +33,6 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    // ================== ĐỌC / XÁC THỰC TOKEN ==================
 
     public String extractUsername(String token) {
         return extractClaim(token, JWTClaimsSet::getSubject);
@@ -57,12 +56,10 @@ public class JwtService {
         return extractClaim(token, JWTClaimsSet::getExpirationTime);
     }
 
-    /** Parse + verify chữ ký + kiểm tra hạn -> trả về claims (payload). */
     private JWTClaimsSet extractAllClaims(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
 
-            // Chỉ chấp nhận HS256 (chống tấn công đổi thuật toán)
             if (!JWSAlgorithm.HS256.equals(signedJWT.getHeader().getAlgorithm())) {
                 throw new InvalidJwtSignatureException("Unsupported JWT algorithm");
             }
@@ -83,7 +80,6 @@ public class JwtService {
         }
     }
 
-    // ================== SINH TOKEN ==================
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -101,24 +97,21 @@ public class JwtService {
         try {
             Date now = new Date();
 
-            // PAYLOAD: registered claims (sub, iat, exp) + private claims
             JWTClaimsSet.Builder claimsBuilder = new JWTClaimsSet.Builder()
                     .subject(userDetails.getUsername())
                     .issueTime(now)
                     .expirationTime(new Date(now.getTime() + expiration));
             extraClaims.forEach(claimsBuilder::claim);
 
-            // HEADER: {"alg":"HS256","typ":"JWT"}
             JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.HS256)
                     .type(JOSEObjectType.JWT)
                     .build();
 
             SignedJWT signedJWT = new SignedJWT(header, claimsBuilder.build());
 
-            // SIGNATURE: HMAC-SHA256(base64url(header) + "." + base64url(payload), secret)
             signedJWT.sign(new MACSigner(getSignInKey()));
 
-            return signedJWT.serialize(); // header.payload.signature
+            return signedJWT.serialize(); 
         } catch (JOSEException e) {
             throw new IllegalStateException("Cannot sign JWT", e);
         }

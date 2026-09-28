@@ -44,7 +44,7 @@ public class User implements UserDetails {
     @Column(columnDefinition = "nvarchar(500)", nullable = false)
     private String images;
 
-    @JsonIgnore // không trả hash mật khẩu ra API
+    @JsonIgnore 
     @Column(nullable = false)
     private String password;
 

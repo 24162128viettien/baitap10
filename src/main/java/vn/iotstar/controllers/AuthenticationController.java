@@ -36,7 +36,6 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserModel loginUser) {
         User authenticatedUser = authenticationService.authenticate(loginUser);
 
-        // private claims đặt thêm vào payload
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("user_id", authenticatedUser.getId());
         extraClaims.put("full_name", authenticatedUser.getFullName());
